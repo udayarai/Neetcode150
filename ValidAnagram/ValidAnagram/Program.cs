@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Diagnostics.Metrics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ValidAnagram
 {
@@ -19,16 +20,57 @@ namespace ValidAnagram
                 return false;
             }
 
-            //convert strings into char arrays
-            char[] sArr = s.ToCharArray();
-            char[] tArr = t.ToCharArray();
+            ////convert strings into char arrays
+            //char[] sArr = s.ToCharArray();
+            //char[] tArr = t.ToCharArray();
 
-            //sort out the arrays
-            Array.Sort(sArr);
-            Array.Sort(tArr);
+            ////sort out the arrays
+            //Array.Sort(sArr);
+            //Array.Sort(tArr);
 
-            //compare the array contents 
-            return sArr.SequenceEqual(tArr);
+            ////compare the array contents 
+            //return sArr.SequenceEqual(tArr);
+
+            Dictionary<char, int> charFrequency = new Dictionary<char, int>();
+
+            //loop through the string s and add frequency
+            foreach (char letter in s)
+            {
+                if (charFrequency.ContainsKey(letter))
+                {
+                    charFrequency[letter]++;
+                } else
+                {
+                    charFrequency.Add(letter, 1);
+                }
+            }
+
+            //loop through the string and remove frequency
+            foreach (char letter in t)
+            {
+                if (!charFrequency.ContainsKey(letter))
+                {
+                    return false;
+                    
+                }
+
+                charFrequency[letter]--;
+
+                if (charFrequency[letter] < 0)
+                {
+                    return false;
+                }
+            }
+
+            foreach (var item in charFrequency)
+            {
+                if (item.Value != 0)
+                {
+                    return false;
+                }    
+            }
+
+            return true;
         }
     }
 }
