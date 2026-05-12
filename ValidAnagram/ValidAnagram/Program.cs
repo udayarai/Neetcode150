@@ -1,4 +1,18 @@
-﻿using System.Diagnostics.Metrics;
+﻿/*
+Given two strings s and t, return true if the two strings are anagrams of each other, otherwise return false.
+
+An anagram is a string that contains the exact same characters as another string, but the order of the characters can be different. 
+
+Input: s = "racecar", t = "carrace"
+
+Output: true
+ 
+*/
+
+
+
+
+using System.Diagnostics.Metrics;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ValidAnagram
