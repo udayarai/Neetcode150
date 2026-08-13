@@ -18,7 +18,7 @@ Algorithm
 1) sort in ascending order
 2) because the order is ascending we can find consequtive numbers 
 3) we create variable currentLength and maxLength
-4) now we loop through the array
+4) now we loop through the sorted array
 5) if its first index just continue
 6) else if the number at current index is greater than the previous number by 1 then add 1 to currentLength
 7) else if the number is a duplicate skip
@@ -39,12 +39,14 @@ namespace LongestConsequtiveSequence
         {
             int[] nums = new int[] { 2, 20, 4, 10, 3, 4, 5 };
             int[] nums2 = new int[] { 0, 3, 2, 5, 4, 6, 1, 1 };
-            int[] nums3 = new int[] { 0  };
+            int[] nums3 = new int[] { 0, 0 };
+            int[] nums4 = new int[] { 1, 3, 5, 2, 4 };
 
-            Console.WriteLine(LongestConsecutive(nums2));
+            Console.WriteLine(LongestConsecutiveON(nums4));
         }
 
-        public static int LongestConsecutive(int[] nums)
+        //O(N log N) solution
+        public static int LongestConsecutiveONLogN(int[] nums)
         {
             //sort the array in ascending order
             Array.Sort(nums);
@@ -65,13 +67,16 @@ namespace LongestConsequtiveSequence
                 if (i == 0)
                 {
                     continue;
-                } else if (i > 0 && nums[i] - 1 == nums[i - 1])
+                }
+                else if (i > 0 && nums[i] - 1 == nums[i - 1])
                 {
                     currentLength += 1;
-                } else if (i > 0 && nums[i] == nums[i - 1]) 
+                }
+                else if (i > 0 && nums[i] == nums[i - 1])
                 {
                     continue;
-                } else
+                }
+                else
                 {
                     if (currentLength > maxLength)
                     {
@@ -90,7 +95,59 @@ namespace LongestConsequtiveSequence
             Console.WriteLine("\n");
             return maxLength;
         }
+
+
+        //O(N) solution
+        /*
+        1) key idea is copy everything across hashset and loop through it (this takes care of duplicates)
+        2) does num - 1 exists if it does then skip loop if it does not that means its a fresh number
+        3) if its a fresh number then add to currentLength then loop through the sequence use hashset count as upper bound
+        4) now through the loop check if num + 1, num + 2 ....etc exists till the sequence runs out
+        5) if it exists then add to current length if it does not then update the maxLength and break
+        6) finally return maxLength
+
+         */
+        public static int LongestConsecutiveON(int[] nums)
+        {
+            //put everything in hashset - takes care of duplicates
+            HashSet<int> set = new HashSet<int>();
+            
+            foreach (int num in nums)
+            {
+                set.Add(num);
+            }
+
+            int currentLength = 0;
+            int maxLength = 0;
+
+            foreach (int num in set) //loop through hashset to avoid duplicates
+            {
+                if (set.Contains(num - 1))
+                {
+                    continue;
+                } else
+                {
+                    currentLength += 1;
+                    for (int i = 1; i <= set.Count; i++) 
+                    {
+                        if (set.Contains(num + i)){
+                            currentLength += 1;
+                        } else
+                        {
+                            //update the maxLength if required 
+                            if (currentLength > maxLength)
+                            {
+                                maxLength = currentLength;
+                            }
+                            currentLength = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return maxLength;
+        }
+
     }
-
-
 }
