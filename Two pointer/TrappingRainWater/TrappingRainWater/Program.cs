@@ -5,9 +5,10 @@
         static void Main(string[] args)
         {
             Solution sol = new Solution();
+            OptimalSolution optSol = new OptimalSolution();
             int[] height = new int[] { 0, 2, 0, 3, 1, 0, 1, 3, 2, 1 };
 
-            Console.WriteLine(sol.Trap(height));
+            Console.WriteLine(optSol.Trap(height));
         }
     }
 
@@ -57,6 +58,58 @@
         public int Min(int maxHeight1, int maxHeight2)
         {
             return maxHeight1 > maxHeight2 ? maxHeight2 : maxHeight1; //return minimum height
+        }
+    }
+
+    //time complexity - O(N) because we are only using one while loop 
+    //space complexity - O(1) because the variabe does not increase with the increase in input we have a set variable leftIndex, rightIndex etc.
+    /*
+    1. create a leftIndex and rightIndex variable
+    2. create leftMax and rightMax
+    3. create a totalArea
+    4. While loop
+    5. check current leftMaxHeight > current left Height, if yes then leftMaxHeight = current left Height
+    6. check current rightMaxHeight to current right Height, if yes then rightMaxHeight = current right Height
+    7. check min of the leftMax and rightMaxHeight (remember min height is the bottle neck so we can calculate the area there and move that pointer
+     */
+    public class OptimalSolution()
+    {
+        public int Trap(int[] height)
+        {
+            int leftIndex = 0;
+            int rightIndex = height.Length - 1;
+            int leftMaxHeight = height[leftIndex];
+            int rightMaxHeight = height[rightIndex];
+            int totalArea = 0;
+
+            while (leftIndex < rightIndex)
+            {
+                //check current leftMaxHeight to current left Height
+                if (height[leftIndex] > leftMaxHeight)
+                {
+                    leftMaxHeight = height[leftIndex];
+                }
+
+                //check current rightMaxHeight to current right Height
+                if (height[rightIndex] > rightMaxHeight)
+                {
+                    rightMaxHeight = height[rightIndex];
+                }
+
+                //check minimum of the leftMaxHeight and rightMaxHeight and move the minimum
+                if (leftMaxHeight > rightMaxHeight)
+                {
+                    totalArea += rightMaxHeight - height[rightIndex];
+                    rightIndex--; 
+                }
+
+                if (rightMaxHeight > leftMaxHeight || rightMaxHeight == leftMaxHeight) //if its equal we can move either left or right 
+                {
+                    totalArea += leftMaxHeight - height[leftIndex];
+                    leftIndex++;
+                }
+            }
+            return totalArea;
         }
     }
 
