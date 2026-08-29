@@ -71,6 +71,8 @@
     5. check current leftMaxHeight > current left Height, if yes then leftMaxHeight = current left Height
     6. check current rightMaxHeight to current right Height, if yes then rightMaxHeight = current right Height
     7. check min of the leftMax and rightMaxHeight (remember min height is the bottle neck so we can calculate the area there and move that pointer
+
+    why two pointer pattern ? Because it improves the space complexity as we do not have to create leftMax and rightMax arrays seperately before calculating the area
      */
     public class OptimalSolution()
     {
