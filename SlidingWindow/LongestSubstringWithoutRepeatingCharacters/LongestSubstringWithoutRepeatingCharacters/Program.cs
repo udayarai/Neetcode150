@@ -8,7 +8,16 @@
             string s = "zxyzxyz";
             string s1 = " ";
             string s2 = "dvdf";
-            Console.WriteLine(bruteForceSolution.LengthOfLongestSubstring(s2));
+            string s3 = "abcabcbb";
+            string s4 = "bbbbb";
+            string s5 = "pwwkew";
+            string s6 = "a b c d";
+            string s7 = "thequickbrownfoxjumpsoverthelazydogthequickbrownfoxjumpsovert";
+
+            //Console.WriteLine(bruteForceSolution.LengthOfLongestSubstring(s2));
+
+            SlightlyOptimalSolution slightlyOptimalSolution = new SlightlyOptimalSolution();
+            Console.WriteLine(slightlyOptimalSolution.LengthOfLongestSubstring(s4));
         }
     }
 
@@ -64,6 +73,62 @@
 
             //if temp array is not empty then current ascii char = temp[temp.Length - 1] this makes it continuous 
             //if not continuous then we reset the temp array
+            return maxLength;
+        }
+    }
+
+
+    /*
+    This solution is conceptually similar to bruteforce solution above
+
+    time complexity is O(N2) because there is one for loop plus .Contains and .IndexOf both can take O(N) and O(N2) become
+    space complexity is O(N) because the variable can increase with the increase in string s
+     
+    1 main thing to solve this problem is we need variable maxLength and a subString
+    2 we need to loop through string s we need this for index
+    3 as we move our index if there are no duplicates we simply add the element to our subString
+    4 if we have a duplicate we find the index and then we reassign our substring by removing duplicate and everything before it
+    5 we must re-evaluate maxLength inside duplicate check and at the end 
+    6 the most tricky part is for no 3 we must also check substring is not equal to element if that's the case do not add element this is 
+        mainly there could be single element only 
+
+     */
+
+    public class SlightlyOptimalSolution
+    {
+        public int LengthOfLongestSubstring(string s)
+        {
+            int maxLength = 0;
+            string subString = "";
+
+            int leftIndex = 0;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (subString.Contains(s[i]))
+                {
+                    int duplicateIndex = subString.IndexOf(s[i]); //find the duplicateIndex in the subString
+                    subString = subString.Substring(duplicateIndex + 1); //remove duplicate and all elements before it 
+
+                    if (maxLength < subString.Length)
+                    {
+                        maxLength = subString.Length;
+                    }
+                }
+
+                if (subString != s[i].ToString())
+                {
+                    subString += s[i];
+                }
+
+
+                if (maxLength < subString.Length)
+                {
+                    maxLength = subString.Length;
+                }
+            }
+
+
             return maxLength;
         }
     }
