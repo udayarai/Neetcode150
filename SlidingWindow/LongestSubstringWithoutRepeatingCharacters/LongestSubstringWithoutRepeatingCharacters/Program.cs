@@ -186,8 +186,7 @@ Key things to remember:
                     {
                         left = lastSeenIndex + 1;
                     }
-                    
-
+                   
                     currentLength = right - left + 1;
                     maxLength = maxLength > currentLength ? maxLength : currentLength;
 
