@@ -13,11 +13,15 @@
             string s5 = "pwwkew";
             string s6 = "a b c d";
             string s7 = "thequickbrownfoxjumpsoverthelazydogthequickbrownfoxjumpsovert";
+            string s8 = "abba";
 
             //Console.WriteLine(bruteForceSolution.LengthOfLongestSubstring(s2));
 
-            SlightlyOptimalSolution slightlyOptimalSolution = new SlightlyOptimalSolution();
-            Console.WriteLine(slightlyOptimalSolution.LengthOfLongestSubstring(s4));
+            //SlightlyOptimalSolution slightlyOptimalSolution = new SlightlyOptimalSolution();
+            //Console.WriteLine(slightlyOptimalSolution.LengthOfLongestSubstring(s4));
+
+            MostOptimalSolution mostOptimalSolution = new MostOptimalSolution();
+            Console.WriteLine(mostOptimalSolution.LengthOfLongestSubstring(s5));
         }
     }
 
@@ -130,6 +134,74 @@
 
 
             return maxLength;
+        }
+    }
+
+
+    /*
+The main key to solve this problem
+
+1. Loop through the string
+2. left will be the starting index of the current continuous substring/window
+3. right is the index of the actual char that we are currently scanning
+4. If unique, put the string char as a dictionary key and its index (i.e. right) as the value, compare the max length values
+5. If duplicate i.e. dictionary contains the char:
+   5.1) Get the index where the char was last seen
+   5.2) Move left to the index where it was last seen + 1 only if its inside or at sliding window
+   5.3) Calculate the length of the current continuous sequence using:
+        right - left + 1
+        (+1 is essential because both left and right are included)
+   5.4) Compare this length with the current max length
+6. Update the dictionary with the current char and its latest index (right)
+7. Finally return current max length
+
+Key things to remember:
+
+- Dictionary = char → most recent index
+- left = start of current valid window
+- right = character currently being scanned
+- No need to use Substring()
+- right - left + 1 = length of the current window
+- left and right only move forward
+- O(n) time because we scan the string once and dictionary lookup is O(1) average
+- O(m) space complexity because of dictionary and we can only store unique characters in it, m is the unique chars in a string
+*/
+    public class MostOptimalSolution()
+    {
+        public int LengthOfLongestSubstring(string s)
+        {
+            Dictionary<char, int> dict = new Dictionary<char, int>();
+            int left = 0;
+            int currentLength = 0;
+            int maxLength = 0;
+
+            for (int right = 0; right < s.Length; right++)
+            {
+                if (dict.ContainsKey(s[right])) //if duplicate found
+                {
+                    int lastSeenIndex = dict[s[right]];
+                    dict[s[right]] = right; //update the lastSeenIndex dictionary value with new index
+
+                    if (lastSeenIndex >= left) //i.e. only move left if its inside or at the sliding window ***
+                    {
+                        left = lastSeenIndex + 1;
+                    }
+                    
+
+                    currentLength = right - left + 1;
+                    maxLength = maxLength > currentLength ? maxLength : currentLength;
+
+                } else
+                {
+                    dict.Add(s[right], right);
+                    currentLength = right - left + 1;
+                    maxLength = maxLength > currentLength ? maxLength : currentLength;
+                }
+
+            }
+
+            return maxLength;
+
         }
     }
 }
